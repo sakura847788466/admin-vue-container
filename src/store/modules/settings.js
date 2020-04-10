@@ -12,12 +12,18 @@ const mutations = {
     if (state.hasOwnProperty(key)) {
       state[key] = value
     }
+  },
+  START_TIME: (state, time) => { //保存时间
+    state = time
   }
 }
 
 const actions = {
   changeSetting ({ commit }, data) {
     commit('CHANGE_SETTING', data)
+  },
+  getTime ({ commit }, data) {
+    commit('START_TIME', data)
   }
 }
 

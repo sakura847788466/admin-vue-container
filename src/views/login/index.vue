@@ -166,16 +166,6 @@ export default {
           this.loading = false;
           this.$router.push({ path: this.redirect || "/" });
         }, 1000);
-
-        // this.$store
-        //   .dispatch("user/login", this.loginForm)
-        //   .then(() => {
-        //     this.$router.push({ path: this.redirect || "/" });
-        //     this.loading = false;
-        //   })
-        //   .catch(() => {
-        //     this.loading = false;
-        //   });
       });
     }
   }

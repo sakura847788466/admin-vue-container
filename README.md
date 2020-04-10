@@ -1,6 +1,6 @@
-# 开箱即用的 vue-admin 模板
+# 得实中间件后台管理页面
 
-> 一款最简单的有 Element UI，axios，iconfont，权限控制和 lint 的 vue-admin 模板
+> Element UI admin-vue
 
 ## scripts
 

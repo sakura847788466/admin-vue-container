@@ -23,7 +23,7 @@
             <span>广州</span>
           </div>
         </el-card>
-        <el-card shadow="hover"
+        <!-- <el-card shadow="hover"
                  style="height:252px;">
           <div slot="header"
                class="clearfix">
@@ -36,9 +36,9 @@
           <el-progress :percentage="13.7"></el-progress>HTML
           <el-progress :percentage="5.9"
                        color="#f56c6c"></el-progress>
-        </el-card>
+        </el-card> -->
       </el-col>
-      <el-col :span="16">
+      <!-- <el-col :span="16">
         <el-row :gutter="20"
                 class="mgb20">
           <el-col :span="8">
@@ -108,12 +108,30 @@
             </el-table-column>
           </el-table>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
+    <!-- <el-row :gutter="20">
+      <el-col :span="12">
+        <el-card shadow="hover">
+          <schart ref="bar"
+                  class="schart"
+                  canvasId="bar"
+                  :options="options"></schart>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card shadow="hover">
+          <schart ref="line"
+                  class="schart"
+                  canvasId="line"
+                  :options="options2"></schart>
+        </el-card>
+      </el-col>
+    </el-row> -->
   </div>
 </template>
-<script>
 
+<script>
 import Schart from 'vue-schart';
 export default {
   name: 'dashboard',
@@ -218,41 +236,26 @@ export default {
             data: [74, 118, 200, 235, 90]
           }
         ]
-      },
-      currentTime: ''//进入时间
+      }
     };
   },
-  mounted () {
-    this.changeDate()
-  },
   components: {
-    Schart,
-
+    Schart
   },
   computed: {
     role () {
       return this.name === 'admin' ? '超级管理员' : '普通用户';
-    },
-
+    }
   },
 
   methods: {
     changeDate () {
-      this.currentTime =
-        new Date().getFullYear() +
-        "-" +
-        (new Date().getMonth() + 1) +
-        "-" +
-        new Date().getDate() +
-        " " +
-        new Date().getHours() +
-        ":" +
-        new Date().getMinutes() +
-        ": " +
-        new Date().getSeconds();
-      const time = this.currentTime
+      const now = new Date().getTime();
+      this.data.forEach((item, index) => {
+        const date = new Date(now - (6 - index) * 86400000);
+        item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+      });
     }
-
 
   }
 };
@@ -262,16 +265,11 @@ export default {
 <style scoped>
 .page {
   box-sizing: border-box;
-  margin: 20px auto;
+  margin: 20px;
   padding: 30px;
   min-height: 833px;
   border-radius: 20px;
   background-color: #ffffff;
-  height: 888px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 95%;
 }
 .el-row {
   margin-bottom: 20px;

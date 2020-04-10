@@ -32,52 +32,60 @@ export const constantRoutes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: '主页', icon: 'dashboard' }
+        meta: { title: '主页', icon: 'dashboard', permissions: ['u1'] }, //permissions权限
+
       }
     ]
   },
-  // 例子
+  // 文档
   {
     path: '/example',
     component: Layout,
     // 重定向，为了登录后跳转用
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: '文档', icon: 'example', activeMenu: '/example/tree' },
+    meta: { title: '文档', icon: 'example', activeMenu: '/example/tree', permissions: ['u2'] },
     children: [
-      // 表格
+      // 下载
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '下载', icon: 'table' }
+        path: 'download',
+        name: 'Download',
+        component: () => import('@/views/Download/index'),
+        meta: { title: '下载', icon: 'table', permissions: ['u2_2'] }
       },
-      // 树
+      // 接口
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '接口', icon: 'tree' }
+        path: 'interFace',
+        name: 'InterFace',
+        component: () => import('@/views/InterFace/index'),
+        meta: { title: '接口', icon: 'tree', permissions: ['u2_3'] }
       },
-      // 按钮
+      // user
       {
-        path: 'button',
-        name: 'Button',
-        component: () => import('@/views/button/index'),
-        meta: { title: '用户', icon: 'user' }
+        path: 'user',
+        name: 'User',
+        component: () => import('@/views/User/index'),
+        meta: { title: '用户', icon: 'user', permissions: ['u2_3'] }
       },
       // 表单
       {
-        path: 'form',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '表单', icon: 'form' }
+        path: 'test',
+        name: 'Test',
+        component: () => import('@/views/Test/Test'),
+        meta: { title: '测试页', icon: 'form', permissions: ['u2_3'] }
       },
       {
         path: 'errPage',
         name: 'errPage',
         component: () => import('@/views/404'),
-        meta: { title: 'err', icon: 'form' }
+        meta: { title: 'err', icon: 'form', permissions: ['u2_3'] }
+      },
+      {
+        path: 'document',
+        name: 'document',
+        component: () => import('@/views/Document/Document'),
+        meta: { title: '文档', icon: 'form', permissions: ['u2_4'] }
+
       }
     ]
   }
