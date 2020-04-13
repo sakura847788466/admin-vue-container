@@ -9,13 +9,15 @@
       label-position：表单标签的位置
 
 
-     -->
-    <el-form ref="loginForm"
-             :model="loginForm"
-             :rules="loginRules"
-             class="login-form"
-             auto-complete="off"
-             label-position="left">
+    -->
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="off"
+      label-position="left"
+    >
       <!-- 标题 -->
       <div class="title-container">
         <h3 class="title">个人登录</h3>
@@ -27,13 +29,15 @@
           <svg-icon icon-class="user" />
         </span>
         <!-- 输入框 -->
-        <el-input ref="username"
-                  v-model="loginForm.username"
-                  placeholder="账号"
-                  name="username"
-                  type="text"
-                  tabindex="1"
-                  auto-complete="off" />
+        <el-input
+          ref="username"
+          v-model="loginForm.username"
+          placeholder="账号"
+          name="username"
+          type="text"
+          tabindex="1"
+          auto-complete="off"
+        />
       </el-form-item>
       <!-- 密码 -->
       <el-form-item prop="password">
@@ -42,18 +46,19 @@
           <svg-icon icon-class="password" />
         </span>
         <!-- 输入框 -->
-        <el-input :key="passwordType"
-                  ref="password"
-                  v-model="loginForm.password"
-                  :type="passwordType"
-                  placeholder="密码"
-                  name="password"
-                  tabindex="2"
-                  auto-complete="off"
-                  @keyup.enter.native="handleLogin" />
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          :type="passwordType"
+          placeholder="密码"
+          name="password"
+          tabindex="2"
+          auto-complete="off"
+          @keyup.enter.native="handleLogin"
+        />
         <!-- 是否隐藏密码 -->
-        <span class="show-pwd"
-              @click="showPwd">
+        <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
@@ -61,10 +66,12 @@
         提交按钮
         loading	是否加载中状态
       -->
-      <el-button :loading="loading"
-                 type="primary"
-                 style="width:100%;margin-bottom:30px;"
-                 @click.native.prevent="handleLogin">登录</el-button>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin"
+      >登录</el-button>
       <!-- 提示 -->
     </el-form>
   </div>
@@ -72,13 +79,14 @@
 
 <script>
 import { validUsername } from "@/utils/validate";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
   name: "Login",
-  mounted () {
-    this.open2()
+  mounted() {
+    this.open2();
   },
-  data () {
+  data() {
     // 简单校验账号
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -98,7 +106,8 @@ export default {
     return {
       loginForm: {
         username: "",
-        password: ""
+        password: "",
+        role: "admin"
       },
 
       loginRules: {
@@ -134,7 +143,7 @@ export default {
   watch: {
     // 获取路由
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
@@ -142,7 +151,7 @@ export default {
   },
   methods: {
     // 显示或者隐藏密码
-    showPwd () {
+    showPwd() {
       this.passwordType = this.passwordType === "password" ? "" : "password";
       // 让输入框聚焦
       this.$nextTick(() => {
@@ -150,24 +159,38 @@ export default {
       });
     },
     //登录提示
-    open2 () {
+    open2() {
       this.$notify({
-        title: '提示',
-        message: 'userName:admin' + 'password:123456',
+        title: "提示",
+        message: "userName:admin" + "password:123456",
         duration: 10000
       });
     },
+
     // 点击登录
-    handleLogin () {
+    handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        if (!valid) return;
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.$router.push({ path: this.redirect || "/" });
-        }, 1000);
+        if (!valid) {
+          return;
+        } else {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            //模拟角色
+            let getUserRole = this.loginForm.userName === 'admin' ? 'admin' : 'user'
+            localStorage.setItem('userRole', getUserRole)
+            this.$router.push({ path: this.redirect || "/" });
+            this.$store.dispatch("user/login", this.loginForm);
+          }, 1000);
+        }
       });
+      // @params:opts Object or String
+      // this.$store.dispatch('模块名/属性名', opts)
+      // @params:opts Object or String
     }
+  },
+  computed: {
+    ...mapActions("user", ["login"])
   }
 };
 </script>

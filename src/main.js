@@ -15,7 +15,7 @@ import router from './router';
 // icon
 import '@/icons';
 // 权限控制
-// import '@/permission'
+// import '@/permission' 
 
 Vue.use(ElementUI);
 

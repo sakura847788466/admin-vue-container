@@ -10,17 +10,17 @@
                  class="user-avator"
                  alt />
             <div class="user-info-cont">
-              <div class="user-info-name">ada</div>
+              <div class="user-info-name">{{name}}</div>
               <div>{{role}}</div>
             </div>
           </div>
           <div class="user-info-list">
             上次登录时间：
-            <span>2020-04-08</span>
+            <span>{{currentTime}}</span>
           </div>
           <div class="user-info-list">
             上次登录地点：
-            <span>广州</span>
+            <span>{{city}}</span>
           </div>
         </el-card>
         <el-card shadow="hover"
@@ -115,11 +115,12 @@
 <script>
 
 import Schart from 'vue-schart';
+import {location} from '../../utils/location'
+import {mapState} from "vuex"
 export default {
   name: 'dashboard',
   data () {
     return {
-      name: localStorage.getItem('ms_username'),
       todoList: [
         {
           title: '今天要修复100个bug',
@@ -219,17 +220,20 @@ export default {
           }
         ]
       },
-      currentTime: ''//进入时间
+      currentTime: '',//进入时间
+      city:'广州',
     };
   },
   mounted () {
     this.changeDate()
+    this.getLocation()
   },
   components: {
     Schart,
 
   },
   computed: {
+    ...mapState("user",["name"]),
     role () {
       return this.name === 'admin' ? '超级管理员' : '普通用户';
     },
@@ -247,13 +251,20 @@ export default {
         " " +
         new Date().getHours() +
         ":" +
-        new Date().getMinutes() +
-        ": " +
-        new Date().getSeconds();
-      const time = this.currentTime
+        new Date().getMinutes()
+        const city = this.city
+        const currentTime = this.currentTime
+        const time ={city,currentTime}
+       this.$store.dispatch("user/setAdress_time", time);
+
+    },
+    getLocation() {
+          let _that = this;
+          let geolocation = location.initMap("map-container"); //定位
+          AMap.event.addListener(geolocation, "complete", result => {
+          _that.city = result.addressComponent.city;
+          });
     }
-
-
   }
 };
 </script>

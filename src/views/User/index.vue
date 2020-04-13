@@ -16,17 +16,17 @@
                        class="user-avator"
                        alt />
                   <div class="user-info-cont">
-                    <div class="user-info-name">ada</div>
-                    <div>{{role}}</div>
+                    <div class="user-info-name">{{name}}</div>
+                    <div>{{role1}}</div>
                   </div>
                 </div>
                 <div class="user-info-list">
                   上次登录时间：
-                  <span>2020-04-08</span>
+                  <span>{{time.currentTime}}</span>
                 </div>
                 <div class="user-info-list">
                   上次登录地点：
-                  <span>广州</span>
+                  <span>{{time.city}}</span>
                 </div>
               </el-card>
             </el-col>
@@ -49,9 +49,14 @@
       <el-tab-pane label="配置设置"
                    name="second">配置设置</el-tab-pane>
       <el-tab-pane label="角色管理"
-                   name="third">角色管理</el-tab-pane>
+                   name="third">
+                   <Player v-if="role.admin=='admin'"/>
+                   <errPage v-if="role.admin=='user'"/>
+                   </el-tab-pane>
       <el-tab-pane label="下载管理"
-                   name="fourth">下载管理</el-tab-pane>
+                   name="fourth">
+                   <DownLoadUser/>
+                   </el-tab-pane>
     </el-tabs>
 
   </div>
@@ -59,7 +64,11 @@
 </template>
 
 <script>
+import Player from "../../components/Player/Player"
+import errPage from "../../components/ErrPage/ErrPage"
+import DownLoadUser from "../../components/DownLoadUser/DownLoadUser"
 
+import {mapState} from 'vuex'
 export default {
   data () {
     return {
@@ -69,19 +78,26 @@ export default {
   created () { },
   methods: {
     handleClick (tab, event) {
-    }
+    },
   },
   computed: {
-    role () {
-      return this.name === 'admin' ? '超级管理员' : '普通用户';
+    ...mapState('user',['time']),
+    ...mapState('user',['name']),
+    ...mapState('user',['role']),
+    role1 () {
+      return this.role.admin === 'admin' ? '超级管理员' : '普通用户';
     }
   },
   watch: {
 
   },
+  components:{Player,errPage,DownLoadUser}
 };
 </script>
 <style >
+.el-tabs__content{
+  position:inherit;
+}
 .el-tabs__item {
   width: 100px;
   text-align: center;

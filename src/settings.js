@@ -1,5 +1,5 @@
 module.exports = {
-  title: '博客后台',
+  title: '得实中间件',
 
   /**
    * @type {boolean} true | false
