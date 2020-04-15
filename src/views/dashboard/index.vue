@@ -110,6 +110,7 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-button @click="getVersionInfo">点击生成秘钥</el-button>
   </div>
 </template>
 <script>
@@ -117,6 +118,7 @@
 import Schart from 'vue-schart';
 import {location} from '../../utils/location'
 import {mapState} from "vuex"
+import {getVersionInfo} from '../../api/index'
 export default {
   name: 'dashboard',
   data () {
@@ -225,8 +227,10 @@ export default {
     };
   },
   mounted () {
-    this.changeDate()
-    this.getLocation()
+    // this.changeDate()
+    // this.getLocation()
+    // this.getVersionInfo()
+    this.setToken()
   },
   components: {
     Schart,
@@ -264,6 +268,36 @@ export default {
           AMap.event.addListener(geolocation, "complete", result => {
           _that.city = result.addressComponent.city;
           });
+    },
+    //setToken
+    setToken(){
+      // console.log(window.location.href)
+      const url = "http://localhost:9002/#/example/user?token=thdByZpOxru1QfgkAycNRZSpnD600eYeDaUZrIVr";
+      const test = url.split('=')[1]
+      localStorage.setItem('Token',test)
+    },
+    getAllEa(){
+      getAllEa().then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getInterfaces(){//获取所有的接口
+      const project=[]
+      getInterfaces(project).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    getVersionInfo(){
+        const id ='5e83ff741ad1b93f20821a15'
+      getVersionInfo(id).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
     }
   }
 };

@@ -7,7 +7,7 @@ Vue.use(Router);
 import Layout from '@/layout';
 /*默认的页面路由 */
 export const constantRoutes = [
-  
+
   // 登录页
   {
     path: '/login',
@@ -105,9 +105,19 @@ export const constantRoutes = [
         name: 'document',
         component: () => import('@/views/Document/Document'),
         meta: {
-          title: '文档',
+          title: '部署文档',
           icon: 'form',
           permissions: ['admin','user']
+        }
+
+      },
+      {
+        path: 'sandbox',
+        name: 'sandbox',
+        component: () => import('@/views/SandBox/SandBox'),
+        meta: {
+          title: '沙箱环境',
+          icon: 'form',
         }
 
       }

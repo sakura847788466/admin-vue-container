@@ -44,13 +44,16 @@
     <br><br>
     <strong>调试结果:</strong>
     <!-- 输出结果 -->
+    <div class="test" v-html="test"></div>
+    <div class="test" v-html="test2"></div>
+
   </div>
 </template>
 
 <script>
 import Token from '../Token/Token'
 import Type from '../Type/Type'
-
+import {getInterface} from '../../api/index'
 export default {
   data () {
     return {
@@ -60,7 +63,12 @@ export default {
       height: 0,
       toggle: true,
       optionTitle: '获取访问令牌',
+      test:'',
+      test2:''
     }
+  },
+  mounted(){
+    this.getInterface()
   },
   methods: {
     toggleCheckResult (type, result) {
@@ -70,6 +78,17 @@ export default {
     closeCheckResult () {
       this.checkResult = false
       this.result = {}
+    },
+    //通过id获取的接口
+    getInterface(){
+      const id ="5e86af5b1ad1b90718fdc460"
+      getInterface(id).then(res=>{
+        console.log(res)
+        this.test=res.data.requestInstance
+        this.test2=res.data.returnInstance
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     //点击显示接口列表
     toggleOption () {
@@ -130,7 +149,9 @@ export default {
       this.checkResult = false
     },
   },
-  components: { Token, Type }
+  components: { Token, Type },
+  computed:{
+  }
 }
 </script>
 

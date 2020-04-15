@@ -1,10 +1,11 @@
 
-
+import {getUserInfo} from '../../api/index'
+// import createVuexAlong from 'vuex-along'
 const user = {
   namespaced: true, //开启命令空间模式,
   state: {
     name: 'ada',
-    userInfo: {},
+    userInfo:'',
     token: '1111',
     avatar: '',
     role: {
@@ -28,17 +29,23 @@ const mutations = {
 
 const actions = {
 
-  //user login  模拟效果
-  login({commit}, userInfo) {
-    commit('SET_USERINFO', userInfo);
-  },
+
   // save time  when the user come in
   setAdress_time({commit},time){
     commit('SET_ADRESS_TIME',time);
   },
+  //get user's info by token
+  async setUserInfo({commit},token){
+      //  const token ='thdByZpOxru1QfgkAycNRZSpnD600eYeDaUZrIVr'
+        getUserInfo(token).then(res=>{
+          commit('SET_USERINFO',res.data)
+        }).catch(err=>{
+          console.log(err)
+        })
+  },
   // user logout
   logout({commit,state}) {
-    
+
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
           commit('SET_TOKEN', '');
@@ -57,4 +64,13 @@ export default {
   state: user.state,
   mutations,
   actions
+  // plugins: [createVuexAlong({
+  //   name:'user_state',
+  //   session:{
+
+  //   },
+  //   local:{
+  //     user:['userInfo']
+  //   }
+  // })]
 };

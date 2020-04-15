@@ -144,7 +144,7 @@ export default {
             },
             {
               id: "1.4",
-              title: "1.4. 开放平台扫码功能说明",
+              title: "1.4. 得实中间件功能说明",
               isShow: true
             }
           ]

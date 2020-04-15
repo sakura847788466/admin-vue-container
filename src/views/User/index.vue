@@ -36,12 +36,14 @@
               <p>用户相关信息<a target="_blank">{{this.$route.path}}</a></p>
             </blockquote>
             <div class="info_item">
-              <div><label>用户秘钥:</label><span>***********</span></div>
-              <div><label>注册时间:</label><span>2020-04-08</span></div>
-              <div><label>秘钥有效时间:</label><span>2020-04-13</span></div>
-              <div><label>登录时间:</label><span>2020-04-08</span></div>
-              <div><label>秘钥过期时间</label><span>2020-04-23</span></div>
-              <div><label>有效天数:</label><span>5</span></div>
+              <div><label>用户id:</label><span>{{userInfo._id}}</span></div>
+              <div><label>用户秘钥:</label><span>{{userInfo.encryption}}</span></div>
+              <div><label>接口有效期:</label><span>{{userInfo.entranceValid=='-1'?'无限期':timestampToTime(userInfo.entranceValid)}}</span></div>
+              <div><label>项目启动有效天数:</label><span>{{userInfo.packageValid=='-1'?'无限期':timestampToTime(userInfo.packageValid)}}</span></div>
+              <div><label>接口权限id:</label><span>{{userInfo.interfaceRole}}</span></div>
+              <div><label>非虚拟number打印次数:</label><span>{{userInfo.printCount}}</span></div>
+              <div><label>创建时间:</label><span>{{timestampToTime(userInfo.createDate)}}</span></div>
+              <div><label>更新时间:</label><span>{{timestampToTime(userInfo.updateDate)}}</span></div>
             </div>
           </div>
         </div>
@@ -75,17 +77,38 @@ export default {
       activeName: 'first'
     };
   },
+  mounted(){
+    this.getUerInfo()
+    console.log(this.timestampToTime(1585900259991))
+  },
   created () { },
   methods: {
     handleClick (tab, event) {
+    },
+    //时间戳转日期
+    timestampToTime(timestamp) {
+      var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var Y = date.getFullYear() + '-';
+      var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+      var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+      var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+      var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+      var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+      return Y+M+D+h+m+s;
+    },
+     getUerInfo(){ //通过秘钥获取信息
+          const token =localStorage.getItem('Token')
+          this.$store.dispatch('user/setUserInfo',token)
     },
   },
   computed: {
     ...mapState('user',['time']),
     ...mapState('user',['name']),
     ...mapState('user',['role']),
+    ...mapState('user',['userInfo']),
     role1 () {
       return this.role.admin === 'admin' ? '超级管理员' : '普通用户';
+
     }
   },
   watch: {
@@ -133,7 +156,7 @@ export default {
   padding: 0.1rem 1.5rem;
   border-left-width: 0.5rem;
   border-left-style: solid;
-  margin: 1rem 0;
+  margin: 10px 0;
   background-color: #f3f5f7;
   border-color: #42b983;
   font-size: 19px;
@@ -143,7 +166,7 @@ export default {
   margin-bottom: 10px;
 }
 .info_item div label {
-  width: 200px;
+  width: 250px;
   line-height: 30px;
   box-sizing: border-box;
   float: left;
@@ -151,7 +174,7 @@ export default {
   padding: 0px 27px;
 }
 .user_container {
-  height: 400px;
+  /* height: 400px; */
   width: 100%;
   background: #f6f6f6;
   display: flex;
