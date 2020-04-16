@@ -1,6 +1,7 @@
 <template>
   <div class="page">
-    <strong>可用接口列表:</strong>
+    <div class="left">
+         <strong>可用接口列表:</strong>
     <div class="title-list">
       <div class="listBox">接口名称<input type="text"
                maxlength="20"
@@ -11,26 +12,8 @@
       <div class="title-option"
            :style="{height:height+'px'}"
            ref="opt">
-        <div class="api-name1"
-             @click="switchOption('token')">获取访问令牌</div>
-        <div class="api-name1"
-             @click="switchOption('type')">获取设备状态</div>
-        <div class="api-name2"
-             @click="switchOption('print')">API 打印或预览</div>
-        <div class="api-name1"
-             @click="switchOption('unlimitedPrint')">无限制通用打印</div>
-        <div class="api-name3"
-             @click="switchOption('penetrate')">透传打印</div>
-        <!--<div class="api-name1" @click="switchOption('expressPrint')">快递面单打印</div>-->
-        <div class="api-name1"
-             @click="switchOption('printCoordinate')">自定义点坐标打印</div>
-        <div class="api-name1"
-             @click="switchOption('getPrintResult')">查询打印结果</div>
-        <div class="api-name1"
-             @click="switchOption('getDelayPrintTask')">获取设备待打印任务</div>
-        <!--<div class="api-name1" @click="switchOption('voiceContrsol')">语音控制</div>-->
-        <div class="api-name1"
-             @click="switchOption('scanning')">扫描调试</div>
+        <div class="api-name1" @click="switchOption(item.type,item.title)" v-for="(item,index) in test_data" :key="index">{{item.title}}</div>
+
       </div>
       <div class="sanjiao ripple"
            @click="toggleOption"></div>
@@ -41,12 +24,49 @@
            :toggleCheckResult="toggleCheckResult" />
     <Type v-if="type==='type'"
           :toggleCheckResult="toggleCheckResult" />
-    <br><br>
-    <strong>调试结果:</strong>
     <!-- 输出结果 -->
-    <div class="test" v-html="test"></div>
-    <div class="test" v-html="test2"></div>
-
+      <CheckResult />
+    </div>
+    <div class="right">
+         <div class="workspace">
+      <div class="page-right" style="margin-left:40px;" id="page">
+        <div class="page-item" v-show="msgId==='1.1'">
+          <div class="page-header">
+            <h2>1.接口使用指南</h2>
+          </div>
+          <ul>
+            <li>
+              <h4>调试须知,调用 API 必须遵循以下规则</h4>
+              <ul class="inside">
+                <li>
+                  请设置模块连接服务器，使用IP或域名：
+                  <p style="color:red">IP格式：129.204.67.94</p>
+                  <p style="color:red">域名格式：open.dascomyun.com</p>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <h4>接口调试</h4>
+            </li>
+              <div class="text-center">
+                <img src="../../assets/user/text3.png" alt="获取访问令牌"  style="width:100%;"/>
+                <p>填写相关的参数,点击调试接口</p>
+              </div>
+          </ul>
+          <ul>
+            <li>
+              <h4>接口详情</h4>
+            </li>
+              <div class="text-center">
+                 <p>接口名称:</p>
+              </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -54,23 +74,28 @@
 import Token from '../Token/Token'
 import Type from '../Type/Type'
 import {getInterface} from '../../api/index'
+import CheckResult from '../../components/CheckResult/CheckResult'
+import testData from '../../utils/data'
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
-      checkResult: false,
+      checkResult: true,
       result: {},
       type: 'token',
       height: 0,
       toggle: true,
-      optionTitle: '获取访问令牌',
-      test:'',
-      test2:''
+      optionTitle: '获取令牌接口',
+      msgId:'1.1',
+      test_data:[]
     }
   },
   mounted(){
     this.getInterface()
   },
   methods: {
+    ...mapActions(['result','clearResult']),
+
     toggleCheckResult (type, result) {
       this.checkResult = type
       this.result = result
@@ -79,20 +104,21 @@ export default {
       this.checkResult = false
       this.result = {}
     },
+
     //通过id获取的接口
     getInterface(){
-      const id ="5e86af5b1ad1b90718fdc460"
-      getInterface(id).then(res=>{
-        console.log(res)
-        this.test=res.data.requestInstance
-        this.test2=res.data.returnInstance
-      }).catch(err=>{
-        console.log(err)
-      })
+        // console.log(testData.testData) //模拟的数据接口列表
+        this.test_data=(testData.testData)
+      // const id ="5e86af5b1ad1b90718fdc460"
+      // getInterface(id).then(res=>{
+      //   console.log(res)
+      //   this.optionTitle=res.data.title
+      // }).catch(err=>{
+      //   console.log(err)
+      // })
     },
     //点击显示接口列表
     toggleOption () {
-      // console.log(this.$refs.opt.children.length)
       if (this.toggle) {
         this.height = 20 * this.$refs.opt.children.length
         this.toggle = !this.toggle
@@ -102,41 +128,26 @@ export default {
       }
     },
     //点击接口项切换对应的组件
-    switchOption (option) {
+    switchOption (option,title) {
 
       switch (option) {
         case 'token':
-          this.optionTitle = '获取访问令牌'
+          this.optionTitle = title
+          this.clearResult()
           break
         case 'print':
-          this.optionTitle = 'API 打印或预览'
+          this.optionTitle = title
           break
         case 'penetrate':
-          this.optionTitle = '透传打印'
+          this.optionTitle = title
           break
         case 'type':
-          this.optionTitle = '获取设备状态'
+          this.optionTitle = title
+          this.clearResult()
+
           break
         case 'unlimitedPrint':
-          this.optionTitle = '无限制通用打印'
-          break
-        case 'expressPrint':
-          this.optionTitle = '快递面单打印'
-          break
-        case 'printCoordinate':
-          this.optionTitle = '自定义点坐标打印'
-          break
-        case 'getPrintResult':
-          this.optionTitle = '查询打印结果'
-          break
-        case 'scanning':
-          this.optionTitle = '扫描调试'
-          break
-        case 'getDelayPrintTask':
-          this.optionTitle = '获取设备待打印任务'
-          break
-        case 'voiceControl':
-          this.optionTitle = '语音控制'
+          this.optionTitle = title
           break
         default:
           this.optionTitle = ''
@@ -149,7 +160,7 @@ export default {
       this.checkResult = false
     },
   },
-  components: { Token, Type },
+  components: { Token, Type ,CheckResult},
   computed:{
   }
 }
@@ -160,10 +171,23 @@ export default {
   box-sizing: border-box;
   margin: 20px;
   padding: 30px;
-  /* width: 1200px; */
   min-height: 833px;
   border-radius: 20px;
   background-color: #ffffff;
+  display: flex;
+}
+.left,.right{
+  flex:1;
+}
+.left{
+  padding:26px 20px 0px 0px;
+}
+.right{
+  margin-left:10px;
+}
+.workspace{
+  height:829px;
+  overflow-y:auto;
 }
 .title-list {
   display: flex;

@@ -63,7 +63,7 @@ export const constantRoutes = [
         name: 'InterFace',
         component: () => import('@/views/InterFace/index'),
         meta: {
-          title: '接口',
+          title: '接口调试',
           icon: 'tree',
           permissions: ['admin,user']
         }

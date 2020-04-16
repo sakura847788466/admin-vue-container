@@ -15,13 +15,24 @@
                placeholder=""
                maxlength="16"> <samp class="tip-info"> 打印机编号1 <span class="secret-warn-tip"></span></samp></p>
     </div>
+      <div><el-button size="mini" class="debugger" @click="Click">调试接口</el-button></div>
 
   </div>
 </template>
 
 <script>
 export default {
+  name:'type',
+  data(){
+    return{
 
+    }
+  },
+  methods:{
+    Click(){
+
+    }
+  }
 }
 </script>
 
@@ -57,5 +68,11 @@ input[type="text"] {
   width: 200px;
   height: 20px;
   outline: none;
+}
+.debugger{
+      margin-left: 21px;
+    background-color: #00BCD4;
+    color: #fff;
+    position: absolute;
 }
 </style>
