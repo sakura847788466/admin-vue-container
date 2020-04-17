@@ -4,7 +4,7 @@
       <div class="sidebar-header">
         <div class="search-form">
           <div class="ui small fluid icon input">
-            <el-input v-model="role.admin" placeholder="请输入搜索关键词" style="width:255px;">
+            <el-input v-model="role" placeholder="请输入搜索关键词" style="width:255px;">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>
@@ -263,7 +263,8 @@ export default {
       ],
       input: "",
       msgId: "1.1",
-      index: null
+      index: null,
+      role:1
     };
   },
   mounted() {
@@ -287,7 +288,7 @@ export default {
     }
   },
   computed: {
-   ...mapState("user",["role"])
+  //  ...mapState("user",["role"])
   }
 };
 </script>

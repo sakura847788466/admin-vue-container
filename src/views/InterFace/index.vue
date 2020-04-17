@@ -12,7 +12,7 @@
       <div class="title-option"
            :style="{height:height+'px'}"
            ref="opt">
-        <div class="api-name1" @click="switchOption(item.type,item.title)" v-for="(item,index) in test_data" :key="index">{{item.title}}</div>
+        <div class="api-name1" @click="switchOption(item.type,item.title,index)" v-for="(item,index) in InterfaceInfo" :key="index">{{item.title}}</div>
 
       </div>
       <div class="sanjiao ripple"
@@ -33,8 +33,7 @@
         <div class="page-item" v-show="msgId==='1.1'">
           <div class="page-header">
             <h2>1.接口使用指南</h2>
-          </div>
-          <ul>
+             <ul>
             <li>
               <h4>调试须知,调用 API 必须遵循以下规则</h4>
               <ul class="inside">
@@ -46,6 +45,8 @@
               </ul>
             </li>
           </ul>
+          </div>
+
           <ul>
             <li>
               <h4>接口调试</h4>
@@ -60,7 +61,9 @@
               <h4>接口详情</h4>
             </li>
               <div class="text-center">
-                 <p>接口名称:</p>
+                <p>项目名称:{{InterfaceInfo.title}}</p>
+                <p>接口描述:{{InterfaceInfo.description}}</p>
+
               </div>
           </ul>
         </div>
@@ -76,7 +79,7 @@ import Type from '../Type/Type'
 import {getInterface} from '../../api/index'
 import CheckResult from '../../components/CheckResult/CheckResult'
 import testData from '../../utils/data'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -87,14 +90,13 @@ export default {
       toggle: true,
       optionTitle: '获取令牌接口',
       msgId:'1.1',
-      test_data:[]
+      role_id:{}
     }
   },
   mounted(){
     this.getInterface()
   },
   methods: {
-    ...mapActions(['result','clearResult']),
 
     toggleCheckResult (type, result) {
       this.checkResult = type
@@ -107,15 +109,12 @@ export default {
 
     //通过id获取的接口
     getInterface(){
-        // console.log(testData.testData) //模拟的数据接口列表
-        this.test_data=(testData.testData)
-      // const id ="5e86af5b1ad1b90718fdc460"
-      // getInterface(id).then(res=>{
-      //   console.log(res)
-      //   this.optionTitle=res.data.title
-      // }).catch(err=>{
-      //   console.log(err)
-      // })
+      const id ="5e99b13702743900451a8d43"
+      getInterface(id).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     //点击显示接口列表
     toggleOption () {
@@ -128,12 +127,11 @@ export default {
       }
     },
     //点击接口项切换对应的组件
-    switchOption (option,title) {
+    switchOption (option,title,index) {
 
       switch (option) {
         case 'token':
           this.optionTitle = title
-          this.clearResult()
           break
         case 'print':
           this.optionTitle = title
@@ -143,8 +141,6 @@ export default {
           break
         case 'type':
           this.optionTitle = title
-          this.clearResult()
-
           break
         case 'unlimitedPrint':
           this.optionTitle = title
@@ -162,7 +158,16 @@ export default {
   },
   components: { Token, Type ,CheckResult},
   computed:{
-  }
+    ...mapState("user",["InterfaceInfo"])
+  },
+  watch:{
+    test(){
+      if(this.InterfaceInfo.interfaceRole!==''){
+        const role_id =[]
+        // role_id.push()
+      }
+    }
+  },
 }
 </script>
 

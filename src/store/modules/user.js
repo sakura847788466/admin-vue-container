@@ -1,76 +1,32 @@
 
-import {getUserInfo} from '../../api/index'
-// import createVuexAlong from 'vuex-along'
 const user = {
   namespaced: true, //开启命令空间模式,
   state: {
-    name: 'ada',
-    userInfo:'',
-    token: '1111',
-    avatar: '',
-    role: {
-      admin: 'user',
-    },
-    time:{}
+   InterfaceInfo:''
   }
 }
 
 const mutations = {
-  SET_USERINFO: (state, userInfo) => {
-    state.userInfo = userInfo;
+  SAVE_INTERFACE: (state, interfaceInfo) => {
+    //先从本地拿
+    localStorage.getItem('interfaceInfo')
+    state.InterfaceInfo = interfaceInfo;
   },
-  SET_ADRESS_TIME: (state, time) => {
-    state.time = time;
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar;
-  }
+
 };
 
 const actions = {
-
-
-  // save time  when the user come in
-  setAdress_time({commit},time){
-    commit('SET_ADRESS_TIME',time);
+  //保存获取的接口信息,权限id
+ saveInterfaceInfo({commit},interfaceInfo){
+          //触发更改前先存储在本地
+          localStorage.setItem('interfaceInfo', JSON.stringify(interfaceInfo))
+          commit('SAVE_INTERFACE',interfaceInfo)
   },
-  //get user's info by token
-  async setUserInfo({commit},token){
-      //  const token ='thdByZpOxru1QfgkAycNRZSpnD600eYeDaUZrIVr'
-        getUserInfo(token).then(res=>{
-          commit('SET_USERINFO',res.data)
-        }).catch(err=>{
-          console.log(err)
-        })
-  },
-  // user logout
-  logout({commit,state}) {
 
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-          commit('SET_TOKEN', '');
-          removeToken();
-          resetRouter();
-          resolve();
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  }
 }
 export default {
   namespaced: true,//命名空间打开
   state: user.state,
   mutations,
   actions
-  // plugins: [createVuexAlong({
-  //   name:'user_state',
-  //   session:{
-
-  //   },
-  //   local:{
-  //     user:['userInfo']
-  //   }
-  // })]
 };

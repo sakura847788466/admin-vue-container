@@ -16,17 +16,17 @@
                        class="user-avator"
                        alt />
                   <div class="user-info-cont">
-                    <div class="user-info-name">{{name}}</div>
-                    <div>{{role1}}</div>
+                    <div class="user-info-name">ada</div>
+                    <div>普通用户</div>
                   </div>
                 </div>
                 <div class="user-info-list">
                   上次登录时间：
-                  <span>{{time.currentTime}}</span>
+                  <span>2020-04-15</span>
                 </div>
                 <div class="user-info-list">
                   上次登录地点：
-                  <span>{{time.city}}</span>
+                  <span>广州</span>
                 </div>
               </el-card>
             </el-col>
@@ -36,14 +36,14 @@
               <p>用户相关信息<a target="_blank">{{this.$route.path}}</a></p>
             </blockquote>
             <div class="info_item">
-              <div><label>用户id:</label><span>{{userInfo._id}}</span></div>
-              <div><label>用户秘钥:</label><span>{{userInfo.encryption}}</span></div>
-              <div><label>接口有效期:</label><span>{{userInfo.entranceValid=='-1'?'无限期':timestampToTime(userInfo.entranceValid)}}</span></div>
-              <div><label>项目启动有效天数:</label><span>{{userInfo.packageValid=='-1'?'无限期':timestampToTime(userInfo.packageValid)}}</span></div>
-              <div><label>接口权限id:</label><span>{{userInfo.interfaceRole}}</span></div>
-              <div><label>非虚拟number打印次数:</label><span>{{userInfo.printCount}}</span></div>
-              <div><label>创建时间:</label><span>{{timestampToTime(userInfo.createDate)}}</span></div>
-              <div><label>更新时间:</label><span>{{timestampToTime(userInfo.updateDate)}}</span></div>
+              <div><label>用户id:</label><span>{{InterfaceInfo._id}}</span></div>
+              <div><label>用户秘钥:</label><span>{{InterfaceInfo.encryption}}</span></div>
+              <div><label>接口有效期:</label><span>{{InterfaceInfo.entranceValid=='-1'?'无限期':timestampToTime(InterfaceInfo.entranceValid)}}</span></div>
+              <div><label>项目启动有效天数:</label><span>{{InterfaceInfo.packageValid=='-1'?'无限期':timestampToTime(InterfaceInfo.packageValid)}}</span></div>
+              <div><label>接口权限id:</label><span>{{InterfaceInfo.interfaceRole}}</span></div>
+              <div><label>非虚拟number打印次数:</label><span>{{InterfaceInfo.printCount}}</span></div>
+              <div><label>创建时间:</label><span>{{timestampToTime(InterfaceInfo.createDate)}}</span></div>
+              <div><label>更新时间:</label><span>{{timestampToTime(InterfaceInfo.updateDate)}}</span></div>
             </div>
           </div>
         </div>
@@ -52,8 +52,8 @@
                    name="second">配置设置</el-tab-pane>
       <el-tab-pane label="角色管理"
                    name="third">
-                   <Player v-if="role.admin=='admin'"/>
-                   <errPage v-if="role.admin=='user'"/>
+                   <!-- <Player /> -->
+                   <errPage />
                    </el-tab-pane>
       <el-tab-pane label="下载管理"
                    name="fourth">
@@ -78,8 +78,6 @@ export default {
     };
   },
   mounted(){
-    this.getUerInfo()
-    console.log(this.timestampToTime(1585900259991))
   },
   created () { },
   methods: {
@@ -96,20 +94,11 @@ export default {
       var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
       return Y+M+D+h+m+s;
     },
-     getUerInfo(){ //通过秘钥获取信息
-          const token =localStorage.getItem('Token')
-          this.$store.dispatch('user/setUserInfo',token)
-    },
   },
   computed: {
-    ...mapState('user',['time']),
-    ...mapState('user',['name']),
-    ...mapState('user',['role']),
-    ...mapState('user',['userInfo']),
-    role1 () {
-      return this.role.admin === 'admin' ? '超级管理员' : '普通用户';
 
-    }
+    ...mapState('user',['InterfaceInfo']),
+
   },
   watch: {
 

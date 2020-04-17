@@ -12,38 +12,42 @@
                maxlength="32" v-model="secret"> <samp class="tip-info">用户秘钥<span class="secret-warn-tip"></span></samp></p>
     </div>
       <div><el-button size="mini" class="debugger" @click="Click">调试接口</el-button></div>
+    <Loading v-if="loading"/>
+
   </div>
 </template>
 
 <script>
+import {mapActions,mapMutations,mapState} from 'vuex'
 import {getToken} from '../../api/index'
+import Loading from '../../components/Loading/Loading'
+import Bus from '../../utils/bus'
 export default {
   name:'token',
   data(){
     return{
       dsAppid:'',
       secret:'',
-      isShow:false
+      isShow:false,
+      loading: false,
+
     }
   },
   methods:{
     Click(){
       const {dsAppid,secret} =this
+        const isShow =!this.isShow
+          this.loading = true
       getToken(dsAppid,secret).then(res=>{
         console.log(res)
+        this.loading=false
         const result = {
               data: res.data.accessToken,
               status: '成功',
               apiName: '获取访问令牌',
               url: 'https://open.dascomyun.com/api/v1.1/jsonWebTokens/getTokens',
-              isShow:!this.isShow
             }
-            // this.loading = false
-            sessionStorage.setItem('token',res.data.accessToken)
-            // this.saveGetToken(res.data.accessToken)
-            // this.toggleCheckResult(true, result)
-            // Bus.$emit('result',result)
-             console.log(this.$store.result.state)
+            this.toggleCheckResult(true, result)
 
       }).catch(err=>{
         const result = {
@@ -51,13 +55,21 @@ export default {
               status: '失败',
               apiName: '获取访问令牌',
               url: 'https://open.dascomyun.com/api/v1.1/jsonWebTokens/getTokens',
-              isShow:!this.isShow
             }
-             this.$store.dispatch('result/setReSuLect',result)
-            console.log(this.$store.state.result.result)
 
+          setTimeout(()=>{
+              this.loading=false
+              const msg ={status:true,result:result}
+              Bus.$emit('msg',msg)
+          },3000)
       })
     }
+  },
+  components:{
+    Loading
+  },
+  props:{
+    // toggleCheckResult:Function
   }
 }
 </script>

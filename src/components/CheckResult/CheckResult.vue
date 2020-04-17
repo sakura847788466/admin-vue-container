@@ -1,27 +1,27 @@
 <template>
     <transition name="fade">
-        <div class="check-result" v-if="isShow">
+        <div class="check-result" v-if='status'>
           <p class="title">检查结果：</p>
           <span class="close" @click="close">关闭</span>
           <div class="list-item">
             <div class="chunk">接 口 名 称:</div>
-            <p class="r-api-name-val">{{result_s.apiName}}</p>
+            <p class="r-api-name-val">{{result.apiName}}</p>
           </div>
           <div class="list-item">
             <div class="chunk">请 求 地 址:</div>
             <p class="r-address">
-              {{result_s.url}}
+              {{result.url}}
             </p>
           </div>
           <div class="list-item">
             <div class="chunk">返 回 结 果:</div>
             <p class="r-result">
-              {{result_s.data}}
+              {{result.data}}
             </p>
           </div>
           <div class="list-item">
             <div class="chunk">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</div>
-            <p class="r-tip" :style="result_s.status=='成功'?{'color':'green'}:{'color':'red'}">{{result_s.status}}</p>
+            <p class="r-tip" :style="result.status=='成功'?{'color':'green'}:{'color':'red'}">{{result.status}}</p>
           </div>
         </div>
     </transition>
@@ -35,27 +35,30 @@ import { mapState } from 'vuex'
     name: "CheckResult",
     data(){
       return{
-        result_s:'',
-        isShow:false
+          result:'',
+          status:''
       }
     },
     mounted(){
-      this.result_s=this.result.result
-        this.isShow=this.result.result.isShow
+
     },
     methods: {
       close() {
-        this.isShow=!this.isShow
+        this.result =""
+        this.status=!this.status
       }
     },
     created(){
-      // Bus.$on('result',e=>{
-      //   this.result_s=e
-      //   this.isShow=e.isShow
-      // })
+      Bus.$on('msg',e=>{
+        this.result = e.result
+        this.status = e.status
+      })
     },
     computed:{
-      ...mapState(['result','result'])
+      // ...mapState(['result','result'])
+    },
+    props:{
+
     }
   }
 </script>

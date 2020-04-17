@@ -10,7 +10,7 @@
                  class="user-avator"
                  alt />
             <div class="user-info-cont">
-              <div class="user-info-name">{{name}}</div>
+              <div class="user-info-name">{{userName}}</div>
               <div>{{role}}</div>
             </div>
           </div>
@@ -110,7 +110,6 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-button @click="getVersionInfo">点击生成秘钥</el-button>
   </div>
 </template>
 <script>
@@ -118,7 +117,7 @@
 import Schart from 'vue-schart';
 import {location} from '../../utils/location'
 import {mapState} from "vuex"
-import {getVersionInfo} from '../../api/index'
+import { getUserInfo,getAllInterface} from '../../api/index'
 export default {
   name: 'dashboard',
   data () {
@@ -224,12 +223,11 @@ export default {
       },
       currentTime: '',//进入时间
       city:'广州',
+      userName:'',
+      role:''
     };
   },
   mounted () {
-    // this.changeDate()
-    // this.getLocation()
-    // this.getVersionInfo()
     this.setToken()
   },
   components: {
@@ -237,11 +235,6 @@ export default {
 
   },
   computed: {
-    ...mapState("user",["name"]),
-    role () {
-      return this.name === 'admin' ? '超级管理员' : '普通用户';
-    },
-
   },
 
   methods: {
@@ -269,31 +262,26 @@ export default {
           _that.city = result.addressComponent.city;
           });
     },
-    //setToken
+    //通过密钥获取接口信息,文档权限
     setToken(){
       // console.log(window.location.href)
-      const url = "http://localhost:9002/#/example/user?token=thdByZpOxru1QfgkAycNRZSpnD600eYeDaUZrIVr";
-      const test = url.split('=')[1]
-      localStorage.setItem('Token',test)
+      const url = "http://localhost:9002/#/example/user?token=8sX2FCZWDnZRCxCsxtbhLY9RDvvreCtpiwtDie1R";
+
+      const token = url.split('token=')[1]
+
+      this.getUserInfo(token) //获取密钥信息
     },
-    getAllEa(){
-      getAllEa().then(res=>{
+    getUserInfo(token){
+      getUserInfo(token).then(res=>{
         console.log(res)
+        //存储数据
+        this.$store.dispatch('user/saveInterfaceInfo',res.data)
       }).catch(err=>{
         console.log(err)
       })
     },
-    getInterfaces(){//获取所有的接口
-      const project=[]
-      getInterfaces(project).then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
-    },
-    getVersionInfo(){
-        const id ='5e83ff741ad1b93f20821a15'
-      getVersionInfo(id).then(res=>{
+    getAll(){
+      getAllInterface().then(res=>{
         console.log(res)
       }).catch(err=>{
         console.log(err)
