@@ -1,75 +1,183 @@
 <template>
   <div class="page">
-    <div class="left">
-         <strong>可用接口列表:</strong>
-    <div class="title-list">
-      <div class="listBox">接口名称<input type="text"
-               maxlength="20"
-               class="api-name-val"
-               v-model="optionTitle"
-               disabled
-               style="height:19px"></div>
-      <div class="title-option"
-           :style="{height:height+'px'}"
-           ref="opt">
-        <div class="api-name1" @click="switchOption(item.type,item.title,index)" v-for="(item,index) in InterfaceInfo" :key="index">{{item.title}}</div>
-
+     <div class="sidebar" style="width:22%;" >
+      <div class="sidebar-header">
+        <div class="search-form">
+          <div class="ui small fluid icon input">
+            <el-input v-model="search" placeholder="请输入搜索关键词"  @keyup.enter.native="searchList(search)" >
+              <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+          </div>
+        </div>
       </div>
-      <div class="sanjiao ripple"
-           @click="toggleOption"></div>
-    </div>
-    <br><br>
-    <strong>接口参数信息:</strong>
-    <Token v-if="type==='token'"
-           :toggleCheckResult="toggleCheckResult" />
-    <Type v-if="type==='type'"
-          :toggleCheckResult="toggleCheckResult" />
-    <!-- 输出结果 -->
-      <CheckResult />
-    </div>
-    <div class="right">
-         <div class="workspace">
-      <div class="page-right" style="margin-left:40px;" id="page">
-        <div class="page-item" v-show="msgId==='1.1'">
-          <div class="page-header">
-            <h2>1.接口使用指南</h2>
-             <ul>
-            <li>
-              <h4>调试须知,调用 API 必须遵循以下规则</h4>
-              <ul class="inside">
-                <li>
-                  请设置模块连接服务器，使用IP或域名：
-                  <p style="color:red">IP格式：129.204.67.94</p>
-                  <p style="color:red">域名格式：open.dascomyun.com</p>
+      <div class="sidebar-body">
+        <div class="catalog-body">
+          <ul>
+            <li class v-for="(item,index) in list" :key="index">
+              <div class="wholerow"></div>
+              <i :class="[item.isShow?'icon el-icon-caret-bottom':'icon el-icon-caret-right']"></i>
+
+              <a class="text" @click="isShow(index)">{{item.title}}</a>
+              <ul v-show="item.isShow" class="ul_item">
+                <li
+
+                  v-for="(i,index) in item.listMenu"
+                  :key="index"
+                >
+                  <div class="wholerow"></div>
+                  <i class="icon"></i>
+                  <a class="text" @click="Tolist(index)">{{index+1}}.{{i.title}}</a>
                 </li>
               </ul>
             </li>
           </ul>
-          </div>
-
-          <ul>
-            <li>
-              <h4>接口调试</h4>
-            </li>
-              <div class="text-center">
-                <img src="../../assets/user/text3.png" alt="获取访问令牌"  style="width:100%;"/>
-                <p>填写相关的参数,点击调试接口</p>
-              </div>
-          </ul>
-          <ul>
-            <li>
-              <h4>接口详情</h4>
-            </li>
-              <div class="text-center">
-                <p>项目名称:{{InterfaceInfo.title}}</p>
-                <p>接口描述:{{InterfaceInfo.description}}</p>
-
-              </div>
-          </ul>
         </div>
       </div>
     </div>
-    </div>
+      <!-- right -->
+      <div class="right">
+        <div class="page-item" v-for="(item,index) in interfaceRole" :key="index" v-show="index==listIndex">
+        <div class="page-header">
+          <h2>{{index+1}}.{{item.title}}</h2>
+        </div>
+        <ul>
+          <li>
+            <h4>简要描述</h4>
+          </li>
+          <li>
+            {{item.description}}
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>请求地址</h4>
+          </li>
+          <li>
+            {{item.requestAddress}}
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>请求方式</h4>
+          </li>
+          <li>
+            {{item.requestType}}
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>请求头</h4>
+          </li>
+          <li>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>参数名</th>
+                  <th>必选</th>
+                  <th>类型</th>
+                  <th>说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" v-for="(item,index) in item.requestHeader" :key="index">
+                  <td  >
+                    {{item.parameterName}}
+                  </td>
+                  <td>
+                   {{item.isChoice?'是':'否'}}
+                  </td>
+                  <td>
+                    {{item.parameterType}}
+                  </td>
+                  <td>
+                    {{item.parameterState}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>参数</h4>
+          </li>
+          <li>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>参数名</th>
+                  <th>必选</th>
+                  <th>类型</th>
+                  <th>说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" v-for="(item,index) in item.requestParamter" :key="index">
+
+                  <td>
+                    {{item.parameterName}}
+                  </td>
+                  <td>
+                    {{item.isChoice?'是':'否'}}
+                  </td>
+                  <td>
+                   {{item.parameterType}}
+                  </td>
+                  <td>
+                    {{item.parameterState}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>请求示例</h4>
+          </li>
+          <li v-html='item.requestInstance'>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>返回示例</h4>
+          </li>
+          <li>成功</li>
+          <li v-html='item.returnInstance'>
+
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h4>返回参数说明</h4>
+          </li>
+          <li>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>参数名</th>
+                  <th>类型</th>
+                  <th>说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" v-for="(item,index) in item.returnParamter" :key="index">
+                  <td>
+                    {{item.parameterName}}
+                  </td>
+                  <td>
+                   {{item.parameterType}}
+                  </td>
+                  <td>
+                    {{item.parameterState}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul>
+      </div>
+      </div>
   </div>
 </template>
 
@@ -89,85 +197,62 @@ export default {
       height: 0,
       toggle: true,
       optionTitle: '获取令牌接口',
-      msgId:'1.1',
-      role_id:{}
+      role_id:{},
+      Info:'',
+      search:'',
+      listIndex:'',
+      findStatus:true,
+       list: [
+        {
+          title: "接口列表",
+          isShow: true,
+          listMenu: []
+        }
+      ],
     }
   },
   mounted(){
-    this.getInterface()
+    for(let i = 0;i<this.interfaceRole.length;i++){
+       const data ={
+         id:i,
+         title:this.interfaceRole[i].title
+       }
+       this.list[0].listMenu.push(data)
+    }
   },
   methods: {
+    isShow(index){
+      this.list[index].isShow = !this.list[index].isShow;
 
-    toggleCheckResult (type, result) {
-      this.checkResult = type
-      this.result = result
     },
-    closeCheckResult () {
-      this.checkResult = false
-      this.result = {}
+    Tolist(index){
+       this.listIndex = index
     },
-
-    //通过id获取的接口
-    getInterface(){
-      const id ="5e99b13702743900451a8d43"
-      getInterface(id).then(res=>{
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
-      })
-    },
-    //点击显示接口列表
-    toggleOption () {
-      if (this.toggle) {
-        this.height = 20 * this.$refs.opt.children.length
-        this.toggle = !this.toggle
-      } else {
-        this.height = 0
-        this.toggle = !this.toggle
-      }
-    },
-    //点击接口项切换对应的组件
-    switchOption (option,title,index) {
-
-      switch (option) {
-        case 'token':
-          this.optionTitle = title
-          break
-        case 'print':
-          this.optionTitle = title
-          break
-        case 'penetrate':
-          this.optionTitle = title
-          break
-        case 'type':
-          this.optionTitle = title
-          break
-        case 'unlimitedPrint':
-          this.optionTitle = title
-          break
-        default:
-          this.optionTitle = ''
-          break
-      }
-
-      this.type = option
-      this.height = 0
-      this.toggle = true
-      this.checkResult = false
-    },
+    searchList(search){
+    //   console.log(search)
+    //  console.log (this.list.listMenu.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())))
+    console.log(this.searchMethod)
+    }
   },
   components: { Token, Type ,CheckResult},
   computed:{
-    ...mapState("user",["InterfaceInfo"])
-  },
-  watch:{
-    test(){
-      if(this.InterfaceInfo.interfaceRole!==''){
-        const role_id =[]
-        // role_id.push()
-      }
+    ...mapState("user",["InterfaceInfo"]),
+    ...mapState("user",["interfaceRole"]),
+    searchMethod() { //模糊查询
+        return this.list[0].listMenu.filter(value => {
+            const new_list = value.title.toLowerCase().includes(this.search.toLowerCase())
+            if(new_list.length==0||new_list.length==undefined){
+                this.findStatus = false;
+                return new_list
+            }else{
+              return new_list
+            }
+        })
     }
   },
+  watch:{
+
+  }
 }
 </script>
 
@@ -180,7 +265,67 @@ export default {
   border-radius: 20px;
   background-color: #ffffff;
   display: flex;
+  overflow: auto;
 }
+ul,li{
+  list-style: none;
+}
+ul{
+  padding: 0;
+  margin: 0;
+}
+.catalog-body {
+    padding: 12px 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.catalog-body>ul{
+    padding-right: 14px;
+    height: 768px;
+    overflow: auto;
+}
+.catalog-body>ul>li{
+  margin-right: 0;
+  position:relative;
+}
+ .catalog-body ul li .wholerow {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    user-select: none;
+    height: 30px;
+}
+.sidebar-body{
+  border: 1px solid #dcd3d3;
+    height: 782px;
+    margin-top: 5px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+.sidebar-body .catalog-body ul li i {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    display: inline-block;
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+}
+.sidebar-body .catalog-body ul li .text {
+    display: inline-block;
+    line-height: 30px;
+    word-break: keep-all;
+    white-space: nowrap;
+    color: #666;
+    vertical-align: middle;
+    position: relative;
+}
+.ul_item li{
+  margin-left:24px;
+}
+/*  */
 .left,.right{
   flex:1;
 }
@@ -188,94 +333,80 @@ export default {
   padding:26px 20px 0px 0px;
 }
 .right{
-  margin-left:10px;
+  margin-left:20px;
+  height: 800px;
+    overflow: auto;
 }
 .workspace{
   height:829px;
   overflow-y:auto;
 }
-.title-list {
-  display: flex;
-  display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
-  display: -moz-box; /* 老版本语法: Firefox (buggy) */
-  display: -ms-flexbox; /* 混合版本语法: IE 10 */
-  display: -webkit-flex; /* 新版本语法: Chrome 21+ */
-  position: relative;
-  flex-direction: row;
-  -ms-flex-direction: row;
-  margin-top: 30px;
-  margin-bottom: 40px;
-  font-size: 20px;
+/*表格样式开始*/
+
+.table {
+    margin: 0 auto;
+    width: 98%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
 }
 
-.title-option {
-  box-sizing: border-box;
-  z-index: 1;
-  display: block;
-  overflow: hidden;
-  position: absolute;
-  top: 8px;
-  left: 126px;
-  height: 0;
-  width: 198px;
-  border: 1px solid #cecece;
-  border-top: 1px solid transparent;
-  background-color: #ffffff;
-  transition: 0.3s;
+.table > thead > tr {
+    height: 24px;
+    line-height: 24px;
+    /*background-color: #35B558;*/
 }
 
-.title-option > div {
-  z-index: 1;
-  font-size: 14px;
-  color: #666666;
-  text-align: center;
-  cursor: pointer;
-  line-height: 20px;
+.table td, .table th {
+    box-sizing: border-box;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
 }
 
-.title-option > div:hover {
-  background-color: #f5f5f5;
+.table th {
+    color: #333;
+    font-weight: 700;
 }
 
-/*参数列表*/
-/*公共样式*/
-
-.listBox {
-  width: 100%;
-  height: 36px;
-  background: #fafafa;
-  line-height: 36px;
-  font-size: 14px;
-  padding-left: 20px;
-  box-sizing: border-box;
-  position: relative;
-}
-.chunk > span {
-  float: left;
-  margin-left: 20px;
-  color: rgba(216, 15, 15, 0.68);
-}
-input[type="text"] {
-  margin-left: 50px;
-  width: 198px;
-  text-align: center;
-  background: white;
-  border: 1px solid #cecece;
+/*表格样式结束*/
+/*pre样式开始*/
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.sanjiao {
-  z-index: 5;
-  position: absolute;
-  width: 10px;
-  height: 8px;
-  top: 12px;
-  left: 300px;
-  transition: 0.3s;
-  background: url("../../assets/user/pull.png") no-repeat;
-  cursor: pointer;
+samp {
+    color: #008626
 }
-.ivu-list-item {
-  text-decoration: underline;
-  cursor: pointer;
+
+span {
+    color: #880000;
 }
+pre span{
+    color: #080;
+}
+.inside li{
+    margin: 10px 40px;
+    list-style: circle;
+}
+.inside li pre{
+    margin: 20px 0;
+}
+.flex li{
+    width: 150px;
+    display: flex;
+
+}
+
+
 </style>

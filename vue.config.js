@@ -6,15 +6,16 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
-const name = defaultSettings.title || '后台管理'; // page title
+const name = defaultSettings.title || '得实中间件'; // page title
 
 const port = process.env.port || process.env.npm_config_port || 9002; // dev port
 
 module.exports = {
-  publicPath: '/',
+  publicPath: '',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: false,
+  runtimeCompiler: true,
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -35,8 +36,10 @@ module.exports = {
     }
   },
   configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
+      // 'vue': 'Vue',
+      // 'vue-router': 'VueRouter',
+      // 'axios': 'axios',
+      // 'element': 'element-ui',
     name: name,
     resolve: {
       alias: {
@@ -76,9 +79,7 @@ module.exports = {
       })
       .end();
 
-    config
-      // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'));
+    config.when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'));
 
     config.when(process.env.NODE_ENV !== 'development', config => {
       config

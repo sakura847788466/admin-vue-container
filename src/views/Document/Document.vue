@@ -4,7 +4,7 @@
       <div class="sidebar-header">
         <div class="search-form">
           <div class="ui small fluid icon input">
-            <el-input v-model="role" placeholder="请输入搜索关键词" style="width:255px;">
+            <el-input v-model="role" placeholder="请输入搜索关键词" style="width:255px;" >
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </div>

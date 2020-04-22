@@ -1,6 +1,6 @@
 import ajax from './ajax'
-let testURl = 'http://192.168.11.231:8081'
-let PRINT_URL = 'https://open.dascomyun.com/api/v1.1/'
+let testURl = API.URL
+let PRINT_URL = API.TEST_URL
 export const getUserInfo = (token) => ajax(testURl + '/v1.1/getEncryptionAccessByN?encryption=' +token + '') //根据秘钥获取用户信息
 
 export const getAllEa = () => ajax(testURl + '/v1.1/getEncryptionAccesses') //获取所有的加密信息

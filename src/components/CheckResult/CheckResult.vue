@@ -1,5 +1,8 @@
 <template>
     <transition name="fade">
+        <div class="check-result">
+          <span>检查结果</span>
+        </div>
         <div class="check-result" v-if='status'>
           <p class="title">检查结果：</p>
           <span class="close" @click="close">关闭</span>

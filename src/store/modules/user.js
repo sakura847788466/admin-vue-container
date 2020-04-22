@@ -2,24 +2,25 @@
 const user = {
   namespaced: true, //开启命令空间模式,
   state: {
-   InterfaceInfo:''
+   InterfaceInfo:'',
+   interfaceRole:''
   }
 }
 
 const mutations = {
   SAVE_INTERFACE: (state, interfaceInfo) => {
     //先从本地拿
-    localStorage.getItem('interfaceInfo')
+    // localStorage.getItem('interfaceInfo')
     state.InterfaceInfo = interfaceInfo;
+    state.interfaceRole =interfaceInfo.interfaceRole
   },
 
 };
 
 const actions = {
-  //保存获取的接口信息,权限id
  saveInterfaceInfo({commit},interfaceInfo){
           //触发更改前先存储在本地
-          localStorage.setItem('interfaceInfo', JSON.stringify(interfaceInfo))
+          // localStorage.setItem('interfaceInfo', JSON.stringify(interfaceInfo))
           commit('SAVE_INTERFACE',interfaceInfo)
   },
 
