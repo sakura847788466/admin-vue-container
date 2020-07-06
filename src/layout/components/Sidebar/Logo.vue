@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      title: "得实中间件管理"
+      title: "....."
     };
   }
 };

@@ -2593,6 +2593,11 @@ caseless@~0.12.0:
   resolved "https://registry.npm.taobao.org/caseless/download/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
+cesium@^1.71.0:
+  version "1.71.0"
+  resolved "https://registry.npm.taobao.org/cesium/download/cesium-1.71.0.tgz#9a4930f0a06e6f8e8b5a196ea24dc9038778c7fa"
+  integrity sha1-mkkw8KBub46LWhluok3JA4d4x/o=
+
 chalk@2.3.0:
   version "2.3.0"
   resolved "https://registry.npm.taobao.org/chalk/download/chalk-2.3.0.tgz#b5ea48efc9c1793dccc9b4767c93914d3f2d52ba"

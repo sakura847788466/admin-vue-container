@@ -25,3 +25,9 @@ npm run lint --fix
 # svg压缩
 npm run svg
 ```
+## 添加更新内容
+
+```bash
+# vue 引入cesiumJS
+ CesiumJs 是一款3维视图的一个数据框架,方便进行3d地图环保海洋等多功能的开发
+```

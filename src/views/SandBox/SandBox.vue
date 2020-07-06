@@ -1,5 +1,5 @@
 <template>
-  <div class="page">沙箱环境</div>
+  <div id="cesiumContainer"></div>
 </template>
 
 <script>
@@ -7,9 +7,18 @@ export default {
   name:'sandBox',
   data(){
     return{
-
+      
     }
-  }
+  },
+  mounted(){
+   this.CreateMap()
+  },
+   methods:{
+     CreateMap(){
+         var viewer = new Cesium.Viewer('cesiumContainer')
+     }
+
+   }
 }
 </script>
 
@@ -27,5 +36,9 @@ export default {
   display: flex;
   flex-direction: column;
   width: 95%;
+}
+#cesiumContainer{
+  width: 100%;
+  height: 919px;
 }
 </style>
