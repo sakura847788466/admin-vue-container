@@ -30,4 +30,7 @@ npm run svg
 ```bash
 # vue 引入cesiumJS
  CesiumJs 是一款3维视图的一个数据框架,方便进行3d地图环保海洋等多功能的开发
+
+ #效果展示如下图
+ ![地球](./src/assets/cesium.png)
 ```
